@@ -5,20 +5,10 @@ import { unwrapResult } from "@reduxjs/toolkit";
 
 import { userLogin } from "../../features/auth/loginSlice.js";
 import { userSignup } from "../../features/auth/signupSlice.js";
-
-interface LoginResponse {
-    status: number;
-    token: string;
-    patient: {
-        id: number;
-        name: string;
-        phone: string;
-        email: string;
-    };
-}
+import { AppDispatch } from "../../features/store.js";
 
 const AuthForm: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
     const [isActive, setIsActive] = useState(false);
@@ -63,39 +53,71 @@ const AuthForm: React.FC = () => {
         }
     };
 
-    const handleSignUp = (e: React.FormEvent) => {
+    const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const name = signUpData.username;
-        const phone = signUpData.phone;
-        const email = signUpData.email;
-        const password = signUpData.password;
+        // const name = signUpData.username;
+        // const phone = signUpData.phone;
+        // const email = signUpData.email;
+        // const password = signUpData.password;
 
-        dispatch(userSignup({ name, phone, email, password }))
-            .then((response: LoginResponse) => {
-                if (response?.status === 201) {
-                    setSignUpData({
-                        username: "",
-                        phone: "",
-                        email: "",
-                        password: "",
-                    });
-                    navigate("/profile");
-                } else {
-                    navigate("/auth");
-                }
-            })
-            .catch((err: { message: React.SetStateAction<string> }) => {
-                console.error(err);
-            })
-            .finally(() => {
+        try {
+            const actionResult = await dispatch(
+                userSignup({
+                    name: signUpData.username,
+                    phone: signUpData.phone,
+                    email: signUpData.email,
+                    password: signUpData.password,
+                })
+            );
+
+            // Unwrap the result
+            const response = unwrapResult(actionResult);
+            console.log("Unwrapped response:", response);
+
+            if (response.status === 201) {
                 setSignUpData({
                     username: "",
                     phone: "",
                     email: "",
                     password: "",
                 });
-            });
+                alert("Success! You can now login with your credentials");
+                navigate("/auth");
+            } else {
+                navigate("/auth");
+            }
+        } catch (error) {
+            console.error("Login error:", error);
+            navigate("/auth");
+        }
+
+        // dispatch(userSignup({ name, phone, email, password }))
+        //     .then((actionResult) => {
+        //         const response = unwrapResult(actionResult);
+        //         if (response.status === 201) {
+        //             setSignUpData({
+        //                 username: "",
+        //                 phone: "",
+        //                 email: "",
+        //                 password: "",
+        //             });
+        //             navigate("/profile");
+        //         } else {
+        //             navigate("/auth");
+        //         }
+        //     })
+        //     .catch((err: { message: React.SetStateAction<string> }) => {
+        //         console.error(err);
+        //     })
+        //     .finally(() => {
+        //         setSignUpData({
+        //             username: "",
+        //             phone: "",
+        //             email: "",
+        //             password: "",
+        //         });
+        //     });
     };
 
     return (
@@ -118,6 +140,7 @@ const AuthForm: React.FC = () => {
                             Create Account
                         </h1>
                         <input
+                            id="username"
                             type="text"
                             placeholder="Username"
                             className="bg-gray-100 border-none my-2 px-4 py-2 text-sm rounded-lg w-full outline-none"
@@ -130,6 +153,7 @@ const AuthForm: React.FC = () => {
                             }
                         />
                         <input
+                            id="phone"
                             type="tel"
                             placeholder="Phone Number"
                             className="bg-gray-100 border-none my-2 px-4 py-2 text-sm rounded-lg w-full outline-none"
@@ -142,6 +166,7 @@ const AuthForm: React.FC = () => {
                             }
                         />
                         <input
+                            id="signup_email"
                             type="email"
                             placeholder="Email"
                             className="bg-gray-100 border-none my-2 px-4 py-2 text-sm rounded-lg w-full outline-none"

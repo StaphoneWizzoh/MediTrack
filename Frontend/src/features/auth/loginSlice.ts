@@ -47,12 +47,15 @@ export const updatePatient = createAsyncThunk(
         try {
             const response = await api.put<ApiResponse>(
                 `/patients/profile/${data.id}/`,
-                data
+                {
+                    name: data.name,
+                    phone: data.phone,
+                }
             );
             return response.data;
         } catch (error) {
-            console.log(error);
-            // state.error = error;
+            console.error("Update error:", error);
+            throw error;
         }
     }
 );

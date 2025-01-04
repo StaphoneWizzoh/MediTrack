@@ -4,8 +4,20 @@ import axios from "axios";
 import { encryptData } from "../../utilities/encryption";
 import { BASE_URL } from "../../assets/constants";
 
+// interface ApiResponse {
+//     status: number;
+//     patient: Patient;
+// }
+
+interface Patient {
+    id: number;
+    name: string;
+    phone: string;
+    email: string;
+}
+
 const initialState = {
-    user: {},
+    patient: {},
     status: "idle",
     error: null,
 };
@@ -30,7 +42,8 @@ export const userSignup = createAsyncThunk(
 
                 return response.data;
             } catch (err) {
-                console.error(err);
+                console.error("Signup error:", err);
+                throw err; // Important: Throw the error so it's properly caught
             }
         } else {
             console.error("No Data received: ", credentials);
@@ -50,11 +63,13 @@ const signupSlice = createSlice({
             .addCase(userSignup.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 // console.log("Login slice payload: " + action.payload);
-                state.user = action.payload;
+                state.patient = action.payload.patient;
 
                 // Encrypt user data before saving to local storage
-                const encryptedUser = encryptData(action.payload);
-                localStorage.setItem("User", encryptedUser);
+                const encryptedUser = encryptData(action.payload?.token);
+                if (encryptedUser) {
+                    localStorage.setItem("cookie", encryptedUser);
+                }
                 // console.log(state.user);
             })
             .addCase(userSignup.rejected, (state) => {
@@ -65,5 +80,7 @@ const signupSlice = createSlice({
 
 export default signupSlice.reducer;
 
+export const currentPatient = (state: { login: { patient: Patient } }) =>
+    state.login.patient;
 export const userSignupStatus = (state: { status: unknown }) => state.status;
 export const userSignupError = (state: { error: unknown }) => state.error;

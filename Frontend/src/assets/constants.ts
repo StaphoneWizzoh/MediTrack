@@ -1,10 +1,7 @@
 // URL constants
-
-// export const BASE_URL = "http://127.0.0.1:8000/api/";
-export const BASE_URL = "http://localhost:8000/api/";
-export const SOCKET_URL = "";
-
-export const USER_URL = "http://127.0.0.1:8000/dj-rest-auth/user";
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const USER_URL = import.meta.env.VITE_USER_URL;
+export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 // Other constants
 export const allowedImageExtensions = ["jpg", "jpeg", "png"];
