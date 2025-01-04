@@ -62,43 +62,10 @@ class PatientDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PatientSerializer
     permission_classes = [IsAuthenticated]
 
-# class PatientRegistrationView(generics.CreateAPIView):
-#     serializer_class = PatientSerializer
-
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         patient = serializer.save()
-
-#         refresh = RefreshToken.for_user(patient.user)
-#         return Response({
-#             'token': str(refresh.access_token),
-#             'user': PatientProfileSerializer(patient).data
-#         }, status=status.HTTP_201_CREATED)
-
-
-# class PatientLoginView(generics.CreateAPIView):
-#     def post(self, request, *args, **kwargs):
-#         email = request.data.get('email')
-#         password = request.data.get('password')
-
-#         user = authenticate(email=email, password=password)
-#         if user:
-#             refresh = RefreshToken.for_user(user)
-#             patient = Patient.objects.get(user=user)
-#             return Response({
-#                 'token': str(refresh.access_token),
-#                 'user': PatientProfileSerializer(patient).data
-#             })
-#         return Response(
-#             {'error': 'Invalid credentials'},
-#             status=status.HTTP_401_UNAUTHORIZED
-#         )
-
-
-# class PatientDetailView(generics.RetrieveUpdateAPIView):
-#     serializer_class = PatientProfileSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def get_object(self):
-#         return self.request.user.patient
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response({"status": 200, "patient": serializer.data})
