@@ -3,27 +3,11 @@ import { Link } from "react-router-dom";
 
 const LandingPage: React.FC = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-r from-gray-200 to-blue-200">
-            <header className="bg-white shadow-md">
-                <nav className="container mx-auto px-6 py-3 flex justify-between items-center">
-                    <div className="text-2xl font-bold text-purple-700">
-                        Gemini Health
-                    </div>
-                    <div>
-                        <Link
-                            to="/auth"
-                            className="bg-purple-700 text-white text-sm py-2 px-4 rounded-lg font-semibold uppercase tracking-wider hover:bg-purple-800 transition-colors"
-                        >
-                            Sign In / Sign Up
-                        </Link>
-                    </div>
-                </nav>
-            </header>
-
-            <main className="container mx-auto px-6 py-12">
+        <div className="min-h-screen bg-gradient-to-r from-gray-200 to-blue-200 flex items-center justify-center">
+            <main className="bg-white container mx-auto px-6 py-12 rounded-3xl shadow-lg relative overflow-hidden w-[768px] max-w-full min-h-[480px]">
                 <div className="text-center">
                     <h1 className="text-4xl font-bold text-gray-800 mb-4">
-                        Welcome to Gemini Health
+                        Welcome to MediTrack
                     </h1>
                     <p className="text-xl text-gray-600 mb-8">
                         Your trusted partner in healthcare management
@@ -66,12 +50,6 @@ const LandingPage: React.FC = () => {
                     </div>
                 </div>
             </main>
-
-            <footer className="bg-gray-800 text-white py-6">
-                <div className="container mx-auto px-6 text-center">
-                    <p>&copy; 2023 Gemini Health. All rights reserved.</p>
-                </div>
-            </footer>
         </div>
     );
 };
