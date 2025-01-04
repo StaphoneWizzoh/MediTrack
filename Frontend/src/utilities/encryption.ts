@@ -12,7 +12,7 @@ export const encryptData = (data: string) => {
             JSON.stringify(data),
             ENCRYPTION_KEY
         ).toString();
-        return encryptedData;
+        return encryptedData || "";
     } catch (error) {
         console.error("Encryption error:", error);
         return null;
