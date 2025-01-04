@@ -5,10 +5,10 @@ from .utils import hash_password
 
 
 class PatientSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Patient
-        fields = ['id', 'name', 'phone', 'email', 'password']
+        fields = ['id', 'name', 'phone', 'email']
+        read_only_fields = ['id', "email"]
 
 
 class PatientLoginSerializer(serializers.ModelSerializer):
