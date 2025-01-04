@@ -1,7 +1,8 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { currentPatient, updatePatient } from "../../features/auth/loginSlice";
+import { AppDispatch } from "../../features/store";
 
 interface Patient {
     id: number;
@@ -11,7 +12,7 @@ interface Patient {
 }
 
 const Profile = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const patient = useSelector(currentPatient) as Patient | null;
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -35,19 +36,23 @@ const Profile = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        if (!patient?.id) return;
+
         try {
-            await dispatch(
+            const result = await dispatch(
                 updatePatient({
-                    id: patient?.id,
-                    ...formData,
+                    id: patient.id,
+                    name: formData.name,
+                    phone: formData.phone,
+                    email: formData.email,
                 })
             ).unwrap();
 
-            setIsEditing(false);
+            if (result.status === 200) {
+                setIsEditing(false);
+            }
         } catch (err) {
-            console.log(err);
-        } finally {
-            // setIsLoading(false);
+            console.error("Update failed:", err);
         }
     };
 
@@ -57,7 +62,7 @@ const Profile = () => {
     return (
         <div className="min-h-screen bg-gradient-to-r from-gray-200 to-blue-200 flex items-center justify-center p-6">
             <main className="w-full max-w-4xl">
-                <div className="text-center mb-8">
+                <div className="text-center mb-2">
                     <h1 className="text-3xl font-bold text-gray-800">
                         Patient Dashboard
                     </h1>
@@ -195,12 +200,8 @@ const Profile = () => {
                                             email: e.target.value,
                                         })
                                     }
-                                    disabled={!isEditing}
-                                    className={`w-full px-3 py-2 border rounded-md ${
-                                        !isEditing
-                                            ? "bg-gray-50 text-gray-700"
-                                            : "bg-white border-purple-500"
-                                    }`}
+                                    disabled
+                                    className="w-full px-3 py-2 border rounded-md bg-gray-50 text-gray-700 "
                                 />
                             </div>
 
