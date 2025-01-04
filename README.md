@@ -219,7 +219,6 @@ GRANT ALL PRIVILEGES ON DATABASE m_treat_db TO m_treat_user;
 
 ### Production Deployment
 
-[Rest of the documentation remains the same...]
 
 1. Clone the repository
 
@@ -317,26 +316,6 @@ The project uses Whitenoise for serving static files in both development and pro
 3. Commit changes
 4. Push to the branch
 5. Create a Pull Request
-
-## Testing
-
-Basic test commands are provided, but test implementation is in progress:
-
-### Backend Tests
-
-```bash
-python manage.py test
-```
-
-### Frontend Tests
-
-```bash
-npm test
-```
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 
