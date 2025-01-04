@@ -70,8 +70,6 @@ PUT    /api/patients/profile/  # Update patient profile
 
 # MediTrack - Patient Management System
 
-[Previous sections remain the same until Setup Instructions]
-
 ## Setup Instructions
 
 ### Prerequisites
