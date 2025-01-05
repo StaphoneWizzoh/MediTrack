@@ -132,7 +132,7 @@ cd Backend
 cp .env.example .env  # Create and edit .env file with following template:
 ```
 
-Create `.env` file in the Backend directory:
+Create `.env` file in the root directory:
 
 ```
 DEBUG=True
